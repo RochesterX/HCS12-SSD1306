@@ -47,7 +47,7 @@ Font.c can be modified according to application requirements with form defined i
 This fork has been designed for use with the Motorola/Freescale/NXP HCS12 series of chips.
 
 ### Tested
-This fork was tested with **_0.96″ 128x64 Adafruit OLED Display (SSD1306 driver)_** and **Dragon12 Light Trainer Rev. D**. The Dragon12 board was equipped with a `MC9S12DG256` and the D-BUG 12 bootloader. The software was designed for use with Freescale CodeWarrior 5.1. Communication utilized the I2C pins on Port J via the chip's IIC controller. This hardware configuration was dictated by education material requirements.
+This fork was tested with **_0.96″ 128x64 Adafruit OLED Display (SSD1306 driver)_** and **Dragon12 Light Trainer Rev. D**. The Dragon12 board was equipped with a `MC9S12DG256` and the D-Bug12 bootloader. The software was designed for use with Freescale CodeWarrior 5.1. Communication utilized the I2C pins on Port J via the chip's IIC controller. This hardware configuration was dictated by education material requirements.
 
 ## Functions
 - [SSD1306_Init (uint8_t)](#ssd1306_init) - Init display
