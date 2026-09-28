@@ -70,7 +70,7 @@ This fork was tested with **_0.96″ 128x64 Adafruit OLED Display (SSD1306 drive
 - [HCS12 IIC Block User Guide](https://docs.rochesterx.dev/Dragon12/modules/I2C%20%20%20%20%20%20%20%28S12IICV2_D%29.pdf)
 - [Additional Dragon12/HCS12 Documentation](https://docs.rochesterx.dev/Dragon12/)
 
-## Init OLED Sequence
+## OLED Init Sequence
 The OLED display init sequence was defined mainly according to page 64 (next to last page) of the [SSD1306 Datasheet](https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf).
 
 ### Flowchart
