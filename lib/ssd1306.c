@@ -24,9 +24,11 @@
 // @includes
 #include "ssd1306.h"
 
+unsigned int _counter;
+
 // @const List of init commands with arguments by Adafruit
 // @link https://github.com/adafruit/Adafruit_SSD1306
-const uint8_t INIT_SSD1306_ADAFRUIT[] PROGMEM = {
+const uint8_t INIT_SSD1306_ADAFRUIT[] /*PROGMEM*/ = {
   17,                                                             // number of initializers
   SSD1306_DISPLAY_OFF, 0,                                         // 0xAE / Set Display OFF
   SSD1306_SET_OSC_FREQ, 1, 0x80,                                  // 0xD5 / 0x80 => D=1; DCLK = Fosc / D <=> DCLK = Fosc
@@ -55,7 +57,7 @@ const uint8_t INIT_SSD1306_ADAFRUIT[] PROGMEM = {
 };
 
 // @const uint8_t - List of init commands according to datasheet SSD1306
-const uint8_t INIT_SSD1306[] PROGMEM = {
+const uint8_t INIT_SSD1306[] /*PROGMEM*/ = {
   19,                                                             // number of initializers
   //SSD1306_RESET, 0,                                               // 0xE4 = Software Reset?
   SSD1306_DISPLAY_OFF, 0,                                         // 0xAE, Set Display OFF
@@ -107,7 +109,8 @@ uint8_t SSD1306_Init (uint8_t address)
   const uint8_t * list = INIT_SSD1306;
   uint8_t status = INIT_STATUS;                                   // init status
   uint8_t arguments;
-  uint8_t commands = pgm_read_byte (list++);
+  //uint8_t commands = pgm_read_byte (list++);
+  uint8_t commands = *list++;
 
   // TWI: Init
   // -------------------------------------------------------------------------------------
@@ -123,15 +126,18 @@ uint8_t SSD1306_Init (uint8_t address)
   while (commands--) {
     // Command
     // -----------------------------------------------------------------------------------
-    status = SSD1306_Send_Command (pgm_read_byte(list++));
+    //status = SSD1306_Send_Command (pgm_read_byte(list++));
+    status = SSD1306_Send_Command (*list++);
     if (SSD1306_SUCCESS != status) {
       return status;
     }
     // Arguments
     // -----------------------------------------------------------------------------------
-    arguments = pgm_read_byte (list++);
+    //arguments = pgm_read_byte (list++);
+    arguments = *list++;
     while (arguments--) {
-      status = SSD1306_Send_Command (pgm_read_byte(list++));  // argument
+      //status = SSD1306_Send_Command (pgm_read_byte(list++));  // argument
+      status = SSD1306_Send_Command (*list++);  // argument
       if (SSD1306_SUCCESS != status) {
         return status;
       }
@@ -368,7 +374,8 @@ uint8_t SSD1306_DrawChar (char character)
     return SSD1306_ERROR;
   }
   while (i < CHARS_COLS_LENGTH) {
-    cacheMemLcd[_counter++] = pgm_read_byte(&FONTS[character-32][i++]);
+    //cacheMemLcd[_counter++] = pgm_read_byte(&FONTS[character-32][i++]);
+    cacheMemLcd[_counter++] = FONTS[character-32][i++];
   }
   _counter++;
 

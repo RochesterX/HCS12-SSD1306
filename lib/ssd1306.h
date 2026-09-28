@@ -26,7 +26,8 @@
   // @includes
   #include <string.h>                     // memset function
   #include "font.h"
-  #include "twi.h"
+  #include "i2c.h"
+  
 
   // Success / Error
   // ------------------------------------------------------------------------------------
@@ -102,7 +103,7 @@
   #define MAX_Y                     (END_PAGE_ADDR + 1) * 8
 
   // @var set area
-  unsigned int _counter;
+  extern unsigned int _counter;
   
   /**
    * --------------------------------------------------------------------------------------------+

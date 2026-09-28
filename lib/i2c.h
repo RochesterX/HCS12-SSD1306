@@ -19,19 +19,26 @@
 #define __TWI_H__
 
   // @includes
-  #include <avr/io.h>
+  #include <hidef.h>      /* common defines and macros */
+  #include "derivative.h"      /* derivative-specific definitions */
+
 
   // define register for TWI communication
   // -------------------------------------------------------------------------------------
-  #if defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega328P__)
+  //#if defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega328P__)
 
-    #define TWI_TWAR            TWAR // TWI (Slave) Address Register
-    #define TWI_TWBR            TWBR // TWI Bit Rate Register
-    #define TWI_TWDR            TWDR // TWI Data Register
-    #define TWI_TWCR            TWCR // TWI Control Register
-    #define TWI_TWSR            TWSR // TWI Status Register
+  #define TWI_TWAR            IBAD // TWI (Slave) Address Register IBAD E0 HCS12
+  #define TWI_TWBR            IBFD // TWI Bit Rate Register        IBFD E1 HCS12
+  #define TWI_TWDR            IBDR // TWI Data Register            IBDR E4 HCS12
+  #define TWI_TWCR            IBCR // TWI Control Register         IBCR E2 HCS12
+  #define TWI_TWSR            IBSR // TWI Status Register          IBSR E3 HCS12
 
-  #endif
+  #define TWEN 7
+  #define TWINT 6
+  #define TWSTA 5 // NOT doing RSTA... "Repeat Start"; doing M/S mode select to 1
+  //#define TWSTO = 255 // NOT doing IBSWAI... "stop in wait mode?"; doing leave alone because TWSTA setting M/S to 1 covers it probably
+
+  //#endif
 
   // Success
   // -------------------------------------------------------------------------------------
@@ -96,33 +103,39 @@
   //      0     1    -     4
   //      1     0    -    16
   //      1     1    -    64
-  #define TWI_FREQ(BIT_RATE, PRESCALER) { TWI_TWBR = BIT_RATE; TWI_TWSR |= (TWI_TWSR & 0x03) | PRESCALER; }
+  //#define TWI_FREQ(BIT_RATE, PRESCALER) { TWI_TWBR = BIT_RATE; TWI_TWSR |= (TWI_TWSR & 0x03) | PRESCALER; }
 
   // TWI start condition
   // -------------------------------------------------------------------------------------
   // (1 <<  TWEN) - TWI Enable
   // (1 << TWINT) - TWI Interrupt Flag - must be cleared by set
   // (1 << TWSTA) - TWI Start
-  #define TWI_START()                   { TWI_TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWSTA); }
+  //#define TWI_START()                   { TWI_TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWSTA); }
+  // inlined
+  //#define TWI_START()                   { IBCR |= (IBCR_TX_RX_MASK | IBCR_MS_SL_MASK); }
+          // SKIPPING IBB CHECK
 
   // TWI stop condition
   // -------------------------------------------------------------------------------------
   // (1 <<  TWEN) - TWI Enable
   // (1 << TWINT) - TWI Interrupt Flag - must be cleared by set
   // (1 << TWSTO) - TWI Stop
-  #define TWI_STOP()                    { TWI_TWCR = (1 << TWEN) | (1 << TWINT) | (1 << TWSTO); }
+  // inlined
+  //#define TWI_STOP()                    { TWI_TWCR = ((1 << TWEN) | (1 << TWINT)) & (0xFF ^ (1 << TWSTA)); }
 
   // TWI enable
   // -------------------------------------------------------------------------------------
   // (1 <<  TWEN) - TWI Enable
   // (1 << TWINT) - TWI Interrupt Flag - must be cleared by set
-  #define TWI_ENABLE()                  { TWI_TWCR = (1 << TWEN) | (1 << TWINT); }
+  //#define TWI_ENABLE()                  { TWI_TWCR = (1 << TWEN) | (1 << TWINT); }
+  #define TWI_ENABLE()                  { /*IBCR |= IBCR_IBEN_MASK; */IBSR = IBSR_IBIF_MASK; }
 
   // TWI test if TWINT Flag is set
-  #define TWI_WAIT_TILL_TWINT_IS_SET()  { while (!(TWI_TWCR & (1 << TWINT))); }
+  //#define TWI_WAIT_TILL_TWINT_IS_SET()  { while (!(TWI_TWCR & (1 << TWINT))); }
+  #define TWI_WAIT_TILL_TWINT_IS_SET()  { while (!(IBSR & IBSR_IBIF_MASK)); }
 
   // TWI status mask
-  #define TWI_STATUS                    ( TWI_TWSR & 0xF8 )
+  //#define TWI_STATUS                    ( TWI_TWSR & 0xF8 )
   
   /**
    * @desc    TWI init
