@@ -1,4 +1,4 @@
-# C Library for SSD1306 0.96" OLED display
+# SSD1306 0.96" OLED I2C Driver for HCS12
 
 ## SSD1306 Description
 Detailed information is available in the [SSD1306 Datasheet](https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf).
