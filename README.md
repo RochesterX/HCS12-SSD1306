@@ -1,6 +1,6 @@
 # SSD1306 0.96" OLED I2C Driver for HCS12
 
-> [!IMPORTANT]
+> [!NOTE]
 > This project is a fork of [Matiasus's](https://github.com/Matiasus) SSD1306 driver for AVR chips. I rewrote only the I2C interface, as I needed it to function on HCS12 chips. The actual driver code is left largely unchanged. Please check out the original project [here](https://github.com/Matiasus/SSD1306).
 
 ## SSD1306 Description
